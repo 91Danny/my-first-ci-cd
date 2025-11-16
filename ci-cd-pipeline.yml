@@ -1,0 +1,54 @@
+# Name of your workflow, will be visible in the GitHub UI
+name: CI/CD Pipeline
+
+# When should this workflow be triggered?
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+# The jobs that this workflow will execute
+jobs:
+  # Job 1: Build and Test
+  build-and-test:
+    # The OS to run on
+    runs-on: ubuntu-latest
+
+    # The steps to execute as part of this job
+    steps:
+    # Step 1: Check out the repository code
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    # Step 2: Set up Python
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+
+    # Step 3: Install dependencies (we don't have any, but this is the pattern)
+    - name: Install dependencies
+      run: |
+        # If you had a requirements.txt, you would do: pip install -r requirements.txt
+        echo "No dependencies to install for this simple project."
+
+    # Step 4: Run our tests
+    - name: Run tests
+      run: |
+        python test_main.py
+
+  # Job 2: A simple deployment (simulated)
+  deploy:
+    # Only run this job if the 'build-and-test' job was successful
+    needs: build-and-test
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Simulate Deployment
+      run: |
+        echo "🎉 DEPLOYING TO PRODUCTION! 🎉"
+        echo "If this were a real project, I would now run commands to deploy to AWS, Azure, etc."
